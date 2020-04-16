@@ -239,14 +239,16 @@ def main(argv):
         for q, recent, covid in task_questions.example_queries:
             html_res = search_tool.get_search_results(q)
             results[q] = html_res
+
+        with open(FLAGS.out_dir + '/cached_results.pkl', 'wb') as fout:
+            pickle.dump(results, fout)
     else:
         with open(FLAGS.results, 'rb') as fin:
             results = pickle.load(fin)
 
     html_output = format_tasks(task_questions.task2questions, results, css)
 
-    with open(FLAGS.out_dir + '/cached_results.pkl', 'wb') as fout:
-        pickle.dump(results, fout)
+
 
     with open(FLAGS.out_dir + "/tasks.html", 'w') as fout:
         fout.write(html_output)
