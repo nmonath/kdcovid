@@ -232,26 +232,25 @@ def main(argv):
     results = defaultdict(str)
     for task, questions in task_questions.task2questions.items():
         for q, recent, covid in questions:
-            html_res = search_tool.get_search_results(q, recent, covid)
+            html_res = search_tool.get_search_results(q)
             results[q] = html_res
-            break
-        break
-
-    html_output = format_tasks(task_questions.task2questions, results, css)
-    with open(FLAGS.out_dir + "/tasks.html", 'w') as fout:
-        fout.write(html_output)
 
     for q, recent, covid in task_questions.example_queries:
-        html_res = search_tool.get_search_results(q, recent, covid)
+        html_res = search_tool.get_search_results(q)
         results[q] = html_res
-        break
+
+    html_output = format_tasks(task_questions.task2questions, results, css)
+
+    with open(FLAGS.out_dir + '/cached_results.pkl', 'wb') as fout:
+        pickle.dump(results, fout)
+
+    with open(FLAGS.out_dir + "/tasks.html", 'w') as fout:
+        fout.write(html_output)
 
     html_examples = format_example_queries(task_questions.example_queries, results, css)
     with open(FLAGS.out_dir + "/examples.html", 'w') as fout:
         fout.write(html_examples)
 
-    with open(FLAGS.out_dir + '/cached_results.pkl', 'wb') as fout:
-        pickle.dump(results, fout)
 
 if __name__ == '__main__':
     app.run(main)
