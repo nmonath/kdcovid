@@ -4,4 +4,4 @@
 set -exu
 
 
-python kdcovid/reduce_vecs.py
+python -m kdcovid.gather_sentence_embeddings

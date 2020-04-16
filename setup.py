@@ -8,6 +8,7 @@ setup(name='kdcovid',
       install_requires=[
           "nltk",
           "absl-py",
+          "python-dateutil",
           "sent2vec @ git+git://github.com/nmonath/sent2vec.git"
       ],
       package_dir={'kdcovid': 'kdcovid'}

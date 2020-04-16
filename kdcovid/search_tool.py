@@ -3,6 +3,7 @@ import pickle
 import time
 from string import punctuation
 
+import re
 import numpy as np
 import sent2vec
 import torch
@@ -10,9 +11,21 @@ from absl import logging
 from nltk import word_tokenize
 from nltk.corpus import stopwords
 from spacy import displacy
+from dateutil import parser as dateparser
 
 logging.set_verbosity(logging.INFO)
 
+DEFAULT_DATE = "2019"
+
+covid_strings = ["covid-19", "covid19", "covid", "sars-cov-2",
+                 "sars-cov2", "sarscov2", "novel coronavirus",
+                 "2019-ncov", "2019ncov"]
+patterns = [re.compile(s, re.IGNORECASE) for s in covid_strings]
+
+def _check_covid(paper):
+  if any(re.search(p, paper["abstract"]) for p in patterns):
+    return True
+  return False
 
 class SearchTool(object):
 
@@ -31,10 +44,20 @@ class SearchTool(object):
             logging.info('Loading Paper Meta Data...')
             self.paper_id_field = paper_id_field
             self.paper_index = {}
+            num_covid = 0
             with open(metadata_file) as f:
                 reader = csv.DictReader(f, delimiter=',')
                 for paper in reader:
                     self.paper_index[paper[self.paper_id_field]] = paper
+                    self.paper_index[paper[self.paper_id_field]]['covid'] = _check_covid(paper)
+                    try:
+                        self.paper_index[paper[self.paper_id_field]]['date'] = dateparser.parse(paper['publish_time'])
+                    except:
+                        self.paper_index[paper[self.paper_id_field]]['date'] = dateparser.parse(DEFAULT_DATE)
+
+                    num_covid += int(self.paper_index[paper['sha']]['covid'])
+                logging.info("Found %d covid papers from %d total" %
+                             (num_covid, len(self.paper_index)))
             logging.info('Loading Paper Meta Data...Done! %s seconds' % (time.time() - t))
             self.doc2sec2text = documents
             self.entity_links = entity_links
@@ -51,7 +74,6 @@ class SearchTool(object):
             with open('%s/all.pkl' % data_dir, 'rb') as fout:
                 self.all_meta = pickle.load(fout)
 
-            self.all_meta = [y for x in self.all_meta for y in x]
             logging.info("%s", self.all_meta[0:5])
             logging.info('Loading sentence vectors... done! %s seconds' % (time.time() - t))
 
@@ -77,10 +99,20 @@ class SearchTool(object):
             logging.info('Loading Paper Meta Data...')
             self.paper_id_field = paper_id_field
             self.paper_index = {}
+            num_covid = 0
             with open('%s/metadata.csv' % data_dir) as f:
                 reader = csv.DictReader(f, delimiter=',')
                 for paper in reader:
                     self.paper_index[paper[self.paper_id_field]] = paper
+                    self.paper_index[paper[self.paper_id_field]]['covid'] = _check_covid(paper)
+                    try:
+                        self.paper_index[paper[self.paper_id_field]]['date'] = dateparser.parse(
+                            paper['publish_time'])
+                    except:
+                        self.paper_index[paper[self.paper_id_field]]['date'] = dateparser.parse(DEFAULT_DATE)
+                    num_covid += int(self.paper_index[paper['sha']]['covid'])
+                logging.info("Found %d covid papers from %d total" %
+                             (num_covid, len(self.paper_index)))
             logging.info('Loading Paper Meta Data...Done! %s seconds' % (time.time() - t))
 
             t = time.time()
@@ -260,7 +292,7 @@ class SearchTool(object):
         s += "</div>"
         return s
 
-    def get_search_results(self, user_query, K=100, Kdocs=20):
+    def get_search_results(self, user_query, sort_by_date=False, covid_only=False, K=100, Kdocs=20):
         if self.cached_results is not None:
             logging.info('getting search results for %s, K=%s, Kdocs=%s', user_query, K, Kdocs)
             return self.cached_results[user_query]
@@ -283,6 +315,8 @@ class SearchTool(object):
                     continue
                 sha = nnv['doc_id']
                 sha = sha.split(".")[0]
+                if covid_only and not self.paper_index[sha]['covid']:
+                    continue
                 if sha not in all_results:
                     paper_metadata = self.paper_index[sha]
                     score = nnv['sim']
@@ -295,9 +329,12 @@ class SearchTool(object):
                     all_results[sha]["sentences"].append(nnv)
                     all_results[sha]["sections"].append(self.doc2sec2text[nnv['doc_id']][nnv['sec_id']])
                     all_results[sha]["section_ids"].append(nnv['sec_id'])
-            all_results_sorted = [(sha, all_results[sha]['score']) for sha in all_results]
+            if sort_by_date:
+              all_results_sorted = [(sha, all_results[sha]['paper']['date']) for sha in all_results]
+            else:
+              all_results_sorted = [(sha, all_results[sha]['score']) for sha in all_results]
             all_results_sorted.sort(reverse=True, key=lambda x: x[1])
-            for sha, score in all_results_sorted[0:Kdocs]:
+            for sha, _ in all_results_sorted[0:Kdocs]:
                 paper_metadata = all_results[sha]['paper']
                 score = all_results[sha]['score']
                 sentences = all_results[sha]['sentences']
