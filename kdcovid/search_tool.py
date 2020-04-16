@@ -23,7 +23,7 @@ class SearchTool(object):
         if use_cached:
             with open('%s/cached_results.pkl' % data_dir, 'rb') as fin:
                 self.cached_results = pickle.load(fin)
-        elif all_vecs is None:
+        elif all_vecs is not None:
             self.all_vecs = all_vecs
             self.all_meta = all_meta
             self.model = model
