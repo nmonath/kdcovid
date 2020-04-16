@@ -9,7 +9,7 @@ import numpy as np
 
 FLAGS = flags.FLAGS
 flags.DEFINE_string('sent2vec_dir', '2020-04-10/sent2vec/', 'out path')
-flags.DEFINE_integer('num_chunks', 15, 'how many files')
+flags.DEFINE_integer('num_chunks', 36, 'how many files')
 flags.DEFINE_string('out_dir', '2020-04-10/', 'out path')
 
 logging.set_verbosity(logging.INFO)

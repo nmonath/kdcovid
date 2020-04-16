@@ -1,4 +1,4 @@
-
+import urllib.parse
 
 class TaskQuestions(object):
 
@@ -145,3 +145,29 @@ class TaskQuestions(object):
             ('Sharing response information among planners and providers', False, False),
             ('Protecting healthcare workers', False, False)
         ]
+
+
+    def format_markdown_example_queries(self):
+        s = "# Example Queries\n"
+        for q, _, _ in self.example_queries:
+            s += "* %s\n" % self.format_queries(q)
+        return s
+
+    def format_tasks(self):
+        s = "# Task & Subtask Queries \n"
+        for q, sti in self.task2questions.items():
+            s += "## %s\n" % q
+            for st, _, _ in sti:
+                s += "* %s\n" % self.format_queries(st)
+        return s
+
+
+    def format_queries(self, q):
+        return """[%s](http://kdcovid.nl/search.html?search_term=%s)""" % (q, urllib.parse.quote(q))
+
+
+if __name__ == "__main__":
+    tq = TaskQuestions()
+    print(tq.format_markdown_example_queries())
+
+    print(tq.format_tasks())
