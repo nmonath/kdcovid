@@ -23,7 +23,8 @@ covid_strings = ["covid-19", "covid19", "covid", "sars-cov-2",
 patterns = [re.compile(s, re.IGNORECASE) for s in covid_strings]
 
 def _check_covid(paper):
-  if any(re.search(p, paper["abstract"]) for p in patterns):
+  if any(re.search(p, paper["title"] + " " + paper["abstract"])
+         for p in patterns):
     return True
   return False
 

@@ -21,7 +21,7 @@ def format_task_html(task2subtasks, subtasks_html):
     s = ""
     s += "<BR/><BR/><h1>Queries for Provided Questions per Task:</h1><BR/>"
     for t, subtasks in task2subtasks.items():
-            s += """<br><br><button type="button" class="collapsible"><b>{}</b></button><div class="content1">{}</div>""".format(
+            s += """<br><br><button type="button" class="collapsible"><b>{}</b></button><div class="content">{}</div>""".format(
                 t, format_subtask_html(subtasks, subtasks_html))
     return s
 
@@ -30,7 +30,7 @@ def format_subtask_html(subtasks, subtasks_html):
     r = ''
     for st, _, _ in subtasks:
         r += """<br><br><button type="button" class="collapsible">{}</button>
-            <div class="content">
+            <div class="content1">
               <p>{}</p>
             </div>""".format(st, subtasks_html[st])
     return r
@@ -217,6 +217,7 @@ def format_tasks(task2subtasks, subtasks_html, css):
     </html>
     """.replace('CONTENT', format_task_html(task2subtasks, subtasks_html)).replace('INSERT_CSS', css)
     return html_string
+
 
 def main(argv):
     logging.info('Running create_cached_search_results with arguments: %s', str(argv))
