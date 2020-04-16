@@ -86,7 +86,7 @@ def format_example_queries(example_queries, queries_html, css):
       background-color: #f1f1f1;
       font-size: 15px;
       font-family: 'Basic Sans', sans-serif;
-      text-align: left;
+      text-align: center;
     }
 
     </style>
