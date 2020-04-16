@@ -53,14 +53,15 @@ def main(argv):
     with open(FLAGS.out_dir + '/chunk_%s.sentences.pkl' % FLAGS.chunk, 'wb') as fout:
         pickle.dump(chunk_meta, fout)
 
-def encode(all_sections, model_path, chunk=0, chunk_size=2500):
+def encode(all_sections, model_path=None, chunk=0, chunk_size=2500, model=None):
     logging.info('loading model...')
-    model = sent2vec.Sent2vecModel()
-    try:
-        model.load_model(model_path)
-    except Exception as e:
-        print(e)
-    logging.info('model successfully loaded')
+    if model is None:
+        model = sent2vec.Sent2vecModel()
+        try:
+            model.load_model(model_path)
+        except Exception as e:
+            print(e)
+        logging.info('model successfully loaded')
 
     stop_words = set(stopwords.words('english'))
 
@@ -90,7 +91,7 @@ def encode(all_sections, model_path, chunk=0, chunk_size=2500):
         logging.info('key %s (%s of %s) ', k, k_idx, len(chunk_keys))
         sentences = load_sents(all_sections, k)
 
-        dim = 700
+        dim = model.get_emb_size()
         vectors = np.zeros((len(sentences), dim))
         gt = time.time
         t = gt()
