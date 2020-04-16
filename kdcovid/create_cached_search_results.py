@@ -29,7 +29,7 @@ def format_task_html(task2subtasks, subtasks_html):
 def format_subtask_html(subtasks, subtasks_html):
     r = ''
     for st in subtasks:
-        r += """<br><br><button type="button" class="collapsible" style="collapsible1"><span>&#8226; </span>{}</button>
+        r += """<br><br><button type="button" class="collapsible">{}</button>
             <div class="content">
               <p>{}</p>
             </div>""".format(st, subtasks_html[st])
@@ -62,22 +62,6 @@ def format_example_queries(example_queries, queries_html, css):
       border-color: #3E4550;
       font-family: 'Basic Sans', sans-serif;
     }
-
-    .collapsible1 {
-      background-color: white;
-      color: #3E4550;
-      border-radius: 7px;
-      cursor: pointer;
-      padding: 18px;
-      text-align: left;
-      width: 100%
-      outline: none;
-      font-size: 18px;
-      border-style: solid;
-      border-color: #3E4550;
-      font-family: 'Basic Sans', sans-serif;
-    }
-
 
     .active, .collapsible:hover {
       background-color: rgb(36.1472, 145.5616, 241.9456);
