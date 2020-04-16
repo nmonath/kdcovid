@@ -28,7 +28,7 @@ def format_task_html(task2subtasks, subtasks_html):
 
 def format_subtask_html(subtasks, subtasks_html):
     r = ''
-    for st in subtasks:
+    for st, _, _ in subtasks:
         r += """<br><br><button type="button" class="collapsible">{}</button>
             <div class="content">
               <p>{}</p>
