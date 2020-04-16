@@ -230,8 +230,8 @@ def main(argv):
     from collections import defaultdict
     results = defaultdict(str)
     for task, questions in task_questions.task2questions.items():
-        for q in questions:
-            html_res = search_tool.get_search_results(q)
+        for q, recent, covid in questions:
+            html_res = search_tool.get_search_results(q, recent, covid)
             results[q] = html_res
             break
         break
@@ -240,9 +240,9 @@ def main(argv):
     with open(FLAGS.out_dir + "/tasks.html", 'w') as fout:
         fout.write(html_output)
 
-    for task, questions in task_questions.task2questions.items():
-        for q in questions:
-            html_res = search_tool.get_search_results(q)
+    for queries in task_questions.example_queries:
+        for q, recent, covid in queries:
+            html_res = search_tool.get_search_results(q, recent, covid)
             results[q] = html_res
             break
         break
