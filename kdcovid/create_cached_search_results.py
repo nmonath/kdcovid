@@ -265,7 +265,7 @@ def main(argv):
 
     html_examples = format_example_queries(task_questions.example_queries, results, css)
     with open(FLAGS.out_dir + "/examples.html", 'w') as fout:
-        fout.write(html_output)
+        fout.write(html_examples)
 
     with open(FLAGS.out_dir + '/cached_results.pkl', 'wb') as fout:
         pickle.dump(results, fout)
