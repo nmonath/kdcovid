@@ -156,7 +156,7 @@ do
 done
 
 # If you have slurm:
-for i in {0..15}
+for i in {0..40}
 do
     sh bin/launch_encode_sentences.sh $i
     sleep 1

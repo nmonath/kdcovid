@@ -16,7 +16,7 @@ FLAGS = flags.FLAGS
 flags.DEFINE_string('model_file', '2020-04-10/BioSentVec_PubMed_MIMICIII-bigram_d700.bin', 'model path')
 flags.DEFINE_string('out_dir', '2020-04-10/sent2vec/', 'out path')
 flags.DEFINE_integer('chunk', 0, 'which chunk')
-flags.DEFINE_integer('chunk_size', 2500, 'how many files')
+flags.DEFINE_integer('chunk_size', 1000, 'how many files')
 flags.DEFINE_string('all_sections', '2020-04-10/all_sections.pkl', 'all sections pickle file')
 
 logging.set_verbosity(logging.INFO)
