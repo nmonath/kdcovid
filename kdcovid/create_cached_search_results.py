@@ -240,11 +240,9 @@ def main(argv):
     with open(FLAGS.out_dir + "/tasks.html", 'w') as fout:
         fout.write(html_output)
 
-    for queries in task_questions.example_queries:
-        for q, recent, covid in queries:
-            html_res = search_tool.get_search_results(q, recent, covid)
-            results[q] = html_res
-            break
+    for q, recent, covid in task_questions.example_queries:
+        html_res = search_tool.get_search_results(q, recent, covid)
+        results[q] = html_res
         break
 
     html_examples = format_example_queries(task_questions.example_queries, results, css)
