@@ -56,7 +56,7 @@ class SearchTool(object):
                     except:
                         self.paper_index[paper[self.paper_id_field]]['date'] = dateparser.parse(DEFAULT_DATE)
 
-                    num_covid += int(self.paper_index[paper['sha']]['covid'])
+                    num_covid += int(self.paper_index[paper[self.paper_id_field]]['covid'])
                 logging.info("Found %d covid papers from %d total" %
                              (num_covid, len(self.paper_index)))
             logging.info('Loading Paper Meta Data...Done! %s seconds' % (time.time() - t))
