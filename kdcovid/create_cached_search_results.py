@@ -225,7 +225,8 @@ def main(argv):
 
     with open(FLAGS.css_file, 'r') as fin:
         css = '\n'.join([x for x in fin])
-        task_questions = TaskQuestions()
+
+    task_questions = TaskQuestions()
 
     if FLAGS.results is None:
         search_tool = SearchTool(data_dir=FLAGS.data_dir, paper_id_field=FLAGS.paper_id)

@@ -137,4 +137,11 @@ class TaskQuestions(object):
             ('Pregnant women coronavirus risks', False, False),
             ('Antivirals effective for H1N1', False, False),
             ('Human Coronavirus 229E background information', False, False),
-            ('Animal hosts for coronavirus', False, False)]
+            ('Animal hosts for coronavirus', False, False),
+            ('Animal models for viral infection', False, False),
+            ('Antiviral treatment for SARS clinical trials', False, False),
+            ('Antivirals effective for H1N1 virus', False, False),
+            ('Immunity studies for MERS', False, False),
+            ('Sharing response information among planners and providers', False, False),
+            ('Protecting healthcare workers', False, False)
+        ]
