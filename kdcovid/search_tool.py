@@ -67,6 +67,39 @@ class SearchTool(object):
         else:
             logging.info('Using data dir %s', data_dir)
             self.data_dir = data_dir
+
+            t = time.time()
+            logging.info('Loading Paper Meta Data...')
+            self.paper_id_field = paper_id_field
+            self.paper_index = {}
+            num_covid = 0
+            with open('%s/metadata.csv' % data_dir) as f:
+                reader = csv.DictReader(f, delimiter=',')
+                for paper in reader:
+                    self.paper_index[paper[self.paper_id_field]] = paper
+                    self.paper_index[paper[self.paper_id_field]]['covid'] = _check_covid(paper)
+                    try:
+                        self.paper_index[paper[self.paper_id_field]]['date'] = dateparser.parse(
+                            paper['publish_time'])
+                    except:
+                        self.paper_index[paper[self.paper_id_field]]['date'] = dateparser.parse(DEFAULT_DATE)
+                    num_covid += int(self.paper_index[paper[self.paper_id_field]]['covid'])
+                logging.info("Found %d covid papers from %d total" %
+                             (num_covid, len(self.paper_index)))
+            logging.info('Loading Paper Meta Data...Done! %s seconds' % (time.time() - t))
+
+            t = time.time()
+            logging.info('Loading section text...')
+            with open('%s/all_sections.pkl' % data_dir, 'rb') as fin:
+                self.doc2sec2text = pickle.load(fin)
+            logging.info('Loading section text...Done! %s seconds' % (time.time() - t))
+
+            t = time.time()
+            logging.info('Loading entity links...')
+            with open('%s/combined_links.pickle' % data_dir, 'rb') as fin:
+                self.entity_links = pickle.load(fin)
+            logging.info('Loading entity links...Done! %s seconds' % (time.time() - t))
+
             logging.info('Loading sentence vectors...')
             t = time.time()
             self.all_vecs = np.load('%s/all.npy' % data_dir)
@@ -94,38 +127,6 @@ class SearchTool(object):
             except Exception as e:
                 print(e)
             logging.info('Loading BioSentVec Model... done! %s seconds' % (time.time() - t))
-
-            t = time.time()
-            logging.info('Loading Paper Meta Data...')
-            self.paper_id_field = paper_id_field
-            self.paper_index = {}
-            num_covid = 0
-            with open('%s/metadata.csv' % data_dir) as f:
-                reader = csv.DictReader(f, delimiter=',')
-                for paper in reader:
-                    self.paper_index[paper[self.paper_id_field]] = paper
-                    self.paper_index[paper[self.paper_id_field]]['covid'] = _check_covid(paper)
-                    try:
-                        self.paper_index[paper[self.paper_id_field]]['date'] = dateparser.parse(
-                            paper['publish_time'])
-                    except:
-                        self.paper_index[paper[self.paper_id_field]]['date'] = dateparser.parse(DEFAULT_DATE)
-                    num_covid += int(self.paper_index[paper['sha']]['covid'])
-                logging.info("Found %d covid papers from %d total" %
-                             (num_covid, len(self.paper_index)))
-            logging.info('Loading Paper Meta Data...Done! %s seconds' % (time.time() - t))
-
-            t = time.time()
-            logging.info('Loading section text...')
-            with open('%s/all_sections.pkl' % data_dir, 'rb') as fin:
-                self.doc2sec2text = pickle.load(fin)
-            logging.info('Loading section text...Done! %s seconds' % (time.time() - t))
-
-            t = time.time()
-            logging.info('Loading entity links...')
-            with open('%s/combined_links.pickle' % data_dir, 'rb') as fin:
-                self.entity_links = pickle.load(fin)
-            logging.info('Loading entity links...Done! %s seconds' % (time.time() - t))
 
         self.colors = {'Highlight': 'linear-gradient(90deg, #aa9cfc, #fc9ce7)', 'disease': '#ffe4b5', 'gene': '#ffa07a'}
         self.stop_words = set(stopwords.words('english'))
