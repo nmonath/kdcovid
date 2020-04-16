@@ -13,6 +13,7 @@ flags.DEFINE_string('data_dir', '2020-04-10', 'data path')
 flags.DEFINE_string('out_dir', '2020-04-10', 'out path')
 flags.DEFINE_string('css_file', 'style.css', 'css_file')
 flags.DEFINE_string('paper_id', 'cord_uid', 'cord_uid or sha')
+flags.DEFINE_string('results', None, 'results pickle')
 
 logging.set_verbosity(logging.INFO)
 
@@ -186,7 +187,7 @@ def format_tasks(task2subtasks, subtasks_html, css):
       background-color: #f1f1f1;
       font-size: 15px;
       font-family: 'Basic Sans', sans-serif;
-      text-align: left;
+      text-align: center`;
     }
 
     </style>
@@ -224,20 +225,23 @@ def main(argv):
 
     with open(FLAGS.css_file, 'r') as fin:
         css = '\n'.join([x for x in fin])
+        task_questions = TaskQuestions()
 
-    search_tool = SearchTool(data_dir=FLAGS.data_dir, paper_id_field=FLAGS.paper_id)
+    if FLAGS.results is None:
+        search_tool = SearchTool(data_dir=FLAGS.data_dir, paper_id_field=FLAGS.paper_id)
+        from collections import defaultdict
+        results = defaultdict(str)
+        for task, questions in task_questions.task2questions.items():
+            for q, recent, covid in questions:
+                html_res = search_tool.get_search_results(q)
+                results[q] = html_res
 
-    task_questions = TaskQuestions()
-    from collections import defaultdict
-    results = defaultdict(str)
-    for task, questions in task_questions.task2questions.items():
-        for q, recent, covid in questions:
+        for q, recent, covid in task_questions.example_queries:
             html_res = search_tool.get_search_results(q)
             results[q] = html_res
-
-    for q, recent, covid in task_questions.example_queries:
-        html_res = search_tool.get_search_results(q)
-        results[q] = html_res
+    else:
+        with open(FLAGS.results, 'rb') as fin:
+            results = pickle.load(fin)
 
     html_output = format_tasks(task_questions.task2questions, results, css)
 
