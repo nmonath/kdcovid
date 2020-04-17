@@ -13,16 +13,16 @@ def parse_befree_output(doc2sec2text, disease_output, gene_output, gene_mapping=
     # calculate sentence starts
     sent_start = {}
     tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-    for sha, doc in tqdm(doc2sec2text.items()):
+    for sha, doc in tqdm(doc2sec2text.items(), desc="calculating character offsets"):
         sent_start_ids = []
         for sec_num, section in doc.items():
             spans = tokenizer.span_tokenize(section)
             for span in spans:
                 sent_start_ids.append(span[0])
         sent_start[sha] = sent_start_ids
-    disease_links = {sha: {para_id: [] for para_id in doc} for sha, doc in tqdm(doc2sec2text.items())}
+    disease_links = {sha: {para_id: [] for para_id in doc} for sha, doc in doc2sec2text.items()}
 
-    for l in tqdm(disease_output):
+    for l in tqdm(disease_output, desc="parsing diseases"):
         line = l.strip().split('\t')
         sha = line[0]
         par = int(line[5])
@@ -37,9 +37,9 @@ def parse_befree_output(doc2sec2text, disease_output, gene_output, gene_mapping=
                                         'type': 'disease',
                                         'url': 'https://www.ncbi.nlm.nih.gov/medgen/?term={}'.format(cid)})
 
-    gene_links = {sha: {para_id: [] for para_id in doc} for sha, doc in tqdm(doc2sec2text.items())}
+    gene_links = {sha: {para_id: [] for para_id in doc} for sha, doc in doc2sec2text.items()}
 
-    for l in tqdm(gene_output):
+    for l in tqdm(gene_output, desc="parsing genes"):
         line = l.strip().split('\t')
         sha = line[0]
         par = int(line[5])
@@ -67,8 +67,8 @@ def parse_befree_output(doc2sec2text, disease_output, gene_output, gene_mapping=
                                      'type': 'gene',
                                      'url': url,
                                      'alt_url': alt_url})
-    combinded_links = {sha: {para_id: [] for para_id in doc} for sha, doc in tqdm(doc2sec2text.items())}
-    for sha, doc in tqdm(doc2sec2text.items()):
+    combinded_links = {sha: {para_id: [] for para_id in doc} for sha, doc in doc2sec2text.items()}
+    for sha, doc in tqdm(doc2sec2text.items(), desc="generating URLs"):
         for para_id in doc:
             combinded_links[sha][para_id] += gene_links[sha][para_id] + disease_links[sha][para_id]
 
