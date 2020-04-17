@@ -37,6 +37,7 @@ class SearchTool(object):
         self.cached_results = None
         self.gv_prefix = gv_prefix
         self.use_object = use_object
+        self.legacy_metadata = legacy_metadata
         if use_cached:
             with open('%s/cached_results.pkl' % data_dir, 'rb') as fin:
                 self.cached_results = pickle.load(fin)
