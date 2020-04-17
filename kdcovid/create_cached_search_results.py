@@ -18,6 +18,409 @@ flags.DEFINE_string('results', None, 'results pickle')
 logging.set_verbosity(logging.INFO)
 
 
+css = """html
+{
+ overflow: -moz-scrollbars-vertical; 
+ overflow-y: scroll;
+}
+
+body
+{
+ margin:0 auto;
+ text-align:left;
+ width:100%;
+ padding: 0 0;
+ font-family: 'Basic Sans', sans-serif;
+ background-color:#fff;
+ color: #3E4550;
+}
+#wrapper
+{
+ margin:0 auto;
+ text-align:left;
+}
+#wrapper h1
+{
+ margin-top:50px;
+ font-size:45px;
+ font-family: 'Basic Sans', sans-serif;
+ color:#585858;
+}
+#wrapper h1 p
+{
+ font-size:18px;
+ font-family: 'Basic Sans', sans-serif;
+}
+
+.q_container {
+    display: flex;
+}
+
+.q_container {
+    display: flex;
+    max-width: 900px;
+    margin: auto;
+    flex-wrap: wrap;
+}
+
+.q_inner {
+    flex: 1;
+}
+
+.q_inner {
+    background-color: #fff;
+    padding: 10px 20px;
+    box-shadow: none;
+    border: 2px solid #178EF4;
+    margin: 10px;
+    color: rgb(0, 61, 114);
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-items: center;
+    max-width: 300px;
+    display: flex;
+    flex: 0 0 calc(33% - 70px);
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-family: 'Basic Sans', sans-serif;
+    /*Added later*/
+    -webkit-appearance: none;
+    -webkit-rtl-ordering: logical;
+    -webkit-writing-mode: unset;
+    box-sizing: unset;
+    user-select: unset;
+    white-space: unset;
+    font: unset;
+    text-rendering: unset;
+    letter-spacing: unset;
+    word-spacing: unset;
+    text-transform: unset;
+    text-indent: unset;
+    text-shadow: unset;
+}
+
+.q_inner:hover {
+    background-color: #178EF4;
+    margin: 10px;
+    color: #fff;
+    cursor: pointer;
+}
+
+
+#search_box input[type="text"]
+{
+ width:450px;
+ height:45px;
+ padding-left:10px;
+ font-size:18px;
+ font-family: 'Basic Sans', sans-serif;
+ margin-bottom:15px;
+ color:#424242;
+ border-radius: 7px;
+ border: 2px solid #A9B5C7;
+
+}
+
+.search {
+    display: flex;
+    justify-content: center;
+}
+#search_box input[type="submit"]
+{
+ width:100px;
+ height:45px;
+ background-color:#178EF4;
+ color:white;
+ border-radius: 7px;
+ border:none;
+ margin-left: 20px;
+ font-size: 1rem;
+ text-transform: none;
+ cursor: pointer;
+ font-family: 'Basic Sans', sans-serif;
+ transition: all 0.3s ease;
+ outline: none;
+}
+#search_box input[type="submit"]:hover
+{
+ transform: scale(1.1);
+ background-color: rgb(16, 123, 216);
+ 
+}
+
+#result_div
+{
+ margin: auto;
+ text-align:left;
+}
+#result_div li
+{
+ margin-bottom:20px;
+ list-style-type:none;
+}
+#result_div li a
+{
+ text-decoration:none;
+ display:block;
+ text-align:left;
+}
+#result_div li a .title
+{
+ font-weight:bold;
+ font-size:18px;
+ font-family: 'Basic Sans', sans-serif;
+ color:#5882FA;
+}
+#result_div li a .desc
+{
+ color:#6E6E6E;
+}
+.topnav {
+  background-color: #fff;
+  width: 100%;
+  overflow: hidden;
+}
+
+.container-inner {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+}
+
+h1 {
+    font-size: 1.5rem;
+    color: rgb(97, 114, 141);
+    margin: 10px;
+    margin-bottom: 30px;
+    font-weight:400;
+}
+
+.logo img {
+    width: 150px;
+}
+
+.container-inner div:nth-child(1) {
+    flex: 1;
+    text-align: left;
+}
+
+.res_text h2 ~ i {
+    color: #0070D0;
+    font-size: 14px;
+}
+
+.res_text h2 a {
+    color: #3E4550;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.year {
+    color: #0070D0;
+    font-size: 14px;
+}
+
+.res_text h2 {
+    margin: 0.5rem 0px ;
+}
+
+.res_image h2 {
+    margin: 5px 0px;
+    margin-top: 30px;
+}
+.res_image p {
+    margin: 0px;
+    font-size: 14px;
+
+}
+.jumbotron {
+    padding: 100px 20px;
+    height: auto;
+    padding-bottom: 50px;
+}
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #3E4550;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #c0e2ff;
+  color: black;
+}
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #8dd3c7;
+  color: white;
+}
+.round {
+  stroke-linejoin: round;
+  font-family: 'Basic Sans', sans-serif;
+}
+.wrap {
+  display: flex;
+   width: auto;
+    max-width: 1200px;
+    margin: auto;
+    padding: 40px 20px;
+
+}
+
+.res_text h2 i {
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.res_text h2 a {
+    transition: all 0.3s ease;
+}
+.res_text h2:hover a {
+    color: rgb(103, 114, 131);
+}
+
+.legend {
+    border-top: 1px solid #BBC3CE;
+    display: flex;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.legend div {
+    display: flex;
+    align-items: center;
+}
+
+.entity {
+    padding: 0px 3px !important;
+    border-radius: 5rem !important;
+}
+
+.legend p {
+    margin: 0 30px 0px 10px;
+}
+.circle {
+    width: 15px;
+    height: 15px;
+    border-radius: 30px;
+}
+
+.yellow {
+    background-color: #FDF8B9;
+}
+.orange {
+    background-color: #FFA07A;
+}
+.purple {
+    background: linear-gradient(90deg, #aa9cfc, #fc9ce7);
+}
+
+.res_text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+   margin: 0px auto;
+   line-height: 1.6rem;
+    border: 1px solid #BBC3CE;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  /* border: 1px solid green; */
+}
+
+.paper-details {
+    padding: 20px;
+    flex: 1;
+}
+
+
+
+.j-logo {
+    max-width: 700px;
+    width: 100%;
+}
+
+.res_image {
+  padding: 20px;
+  border-top: 1px solid #BBC3CE;
+  border-bottom: 1px solid #BBC3CE;
+  border-right: 1px solid #BBC3CE;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.res_image::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.res_image::-webkit-scrollbar:vertical {
+    width: 8px;
+}
+
+.res_image::-webkit-scrollbar:horizontal {
+    height: 8px;
+}
+
+.res_image::-webkit-scrollbar-thumb {
+    border-radius: 1px;
+    border: 1px solid white; /* should match background, can't be transparent */
+    background-color: rgba(0, 0, 0, .5);
+}
+
+@media (max-width: 767px) {
+  .wrap {
+    flex-direction: column;
+  }
+  .one,
+  .two {
+    width: auto;
+    overflow: -moz-scrollbars-vertical; 
+    overflow: scroll;
+  }
+
+  .res_image object {
+    width: 100%;
+  }
+
+  .res_image {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-left: 1px solid #BBC3CE;
+    border-top: none;
+    border-top-right-radius: 0px;
+  }
+
+  .res_text {
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 0px;
+      border-bottom-left-radius: 0px;
+  }
+
+  .q_inner {
+      flex: 0 0 calc(50% - 70px);
+  }
+}
+@media (max-width: 464px) {
+  .q_container {
+      flex-direction: column;
+  }
+
+  .q_inner {
+      flex: 1;
+      max-width: none;
+  }
+}
+"""
+
+
+
 def format_task_html(task2subtasks, subtasks_html):
     s = ""
     s += "<BR/><BR/><h1>Queries for Provided Questions per Task:</h1><BR/>"
@@ -55,7 +458,7 @@ def format_example_queries(example_queries, queries_html, css):
       border-radius: 7px;
       cursor: pointer;
       padding: 18px;
-      text-align: center;
+      text-align: left;
       width: 100%
       outline: none;
       font-size: 18px;
@@ -87,7 +490,7 @@ def format_example_queries(example_queries, queries_html, css):
       background-color: white;
       font-size: 15px;
       font-family: 'Basic Sans', sans-serif;
-      text-align: center;
+      text-align: left;
     }
 
     </style>
@@ -139,7 +542,7 @@ def format_tasks(task2subtasks, subtasks_html, css):
       border-radius: 7px;
       cursor: pointer;
       padding: 18px;
-      text-align: center;
+      text-align: left;
       width: 100%
       outline: none;
       font-size: 18px;
@@ -187,7 +590,7 @@ def format_tasks(task2subtasks, subtasks_html, css):
       background-color: #f1f1f1;
       font-size: 15px;
       font-family: 'Basic Sans', sans-serif;
-      text-align: center`;
+      text-align: left`;
     }
 
     </style>
@@ -223,9 +626,6 @@ def format_tasks(task2subtasks, subtasks_html, css):
 def main(argv):
     logging.info('Running create_cached_search_results with arguments: %s', str(argv))
 
-    with open(FLAGS.css_file, 'r') as fin:
-        css = '\n'.join([x for x in fin])
-
     task_questions = TaskQuestions()
 
     if FLAGS.results is None:
@@ -248,8 +648,6 @@ def main(argv):
             results = pickle.load(fin)
 
     html_output = format_tasks(task_questions.task2questions, results, css)
-
-
 
     with open(FLAGS.out_dir + "/tasks.html", 'w') as fout:
         fout.write(html_output)
