@@ -31,9 +31,12 @@ def _check_covid(paper):
 class SearchTool(object):
 
     def __init__(self, data_dir='./', use_cached=False, paper_id_field='cord_uid', all_vecs=None, all_meta=None,
-                 model=None, metadata_file=None, documents=None, entity_links=None, cached_result_file=None):
+                 model=None, metadata_file=None, documents=None, entity_links=None, cached_result_file=None,
+                 gv_prefix="", use_object=True, legacy_metadata=False):
         t_start = time.time()
         self.cached_results = None
+        self.gv_prefix = gv_prefix
+        self.use_object = use_object
         if use_cached:
             with open('%s/cached_results.pkl' % data_dir, 'rb') as fin:
                 self.cached_results = pickle.load(fin)
@@ -158,14 +161,16 @@ class SearchTool(object):
             distances, indices = topk[0].cpu().numpy(), topk[1].cpu().numpy()
             for j in range(distances.shape[0]):
                 qr_key = query_metadata[i][-1]
-                # nn[qr_key] = [{'doc_id': base_metadata[x][0].replace('.json', ''), 'sent_text': base_metadata[x][1],
-                #                'sent_no': base_metadata[x][2],
-                #                'sec_id': base_metadata[x][3], 'sim': distances[j, idx]} for idx, x in
-                #               enumerate(indices[j])]
-                nn[qr_key] = [{'doc_id': base_metadata[x][0].replace('.json', ''), 'sent_text': base_metadata[x][3],
-                               'sent_no': base_metadata[x][2],
-                               'sec_id': base_metadata[x][1], 'sim': distances[j, idx]} for idx, x in
-                              enumerate(indices[j])]
+                if self.legacy_metadata:
+                    nn[qr_key] = [{'doc_id': base_metadata[x][0].replace('.json', ''), 'sent_text': base_metadata[x][1],
+                                   'sent_no': base_metadata[x][2],
+                                   'sec_id': base_metadata[x][3], 'sim': distances[j, idx]} for idx, x in
+                                  enumerate(indices[j])]
+                else:
+                    nn[qr_key] = [{'doc_id': base_metadata[x][0].replace('.json', ''), 'sent_text': base_metadata[x][3],
+                                   'sent_no': base_metadata[x][2],
+                                   'sec_id': base_metadata[x][1], 'sim': distances[j, idx]} for idx, x in
+                                  enumerate(indices[j])]
             logging.info('Finished % out of %s in %s', i, query_vectors.shape[0], time.time() - t)
             del topk
             del distances
@@ -298,8 +303,12 @@ class SearchTool(object):
         #         print(sec)
         #         print(sents)
         # Adding image part
-        s += '<div class="res_image"><h2>Gene-Disease Association</h2><p>Click on the gene/disease for more information</p><br><object data="gv_files/{}.gv.svg" type="image/svg+xml"></object><p></p><p class="cite"><br>Graph data from <a href="https://www.disgenet.org">DisGeNET v6.0</a></p></div>'.format(
-            sha)
+        if self.use_object:
+            s += '<div class="res_image"><h2>Gene-Disease Association</h2><p>Click on the gene/disease for more information</p><br><object data="{}gv_files/{}.gv.svg" type="image/svg+xml"></object><p></p><p class="cite"><br>Graph data from <a href="https://www.disgenet.org">DisGeNET v6.0</a></p></div>'.format(
+                self.gv_prefix, sha)
+        else:
+            s += '<div class="res_image"><h2>Gene-Disease Association</h2><p>Click on the gene/disease for more information</p><br><img src="{}gv_files/{}.gv.svg"><p></p><p class="cite"><br>Graph data from <a href="https://www.disgenet.org">DisGeNET v6.0</a></p></div>'.format(
+                self.gv_prefix, sha)
         # s += "<div class=\"res_image\"><img src=\"gv_files/{}.gv.svg\" alt=\"Mini-KB\" width=\"95%\"></div>".format(sha)
         s += "</div>"
         return s

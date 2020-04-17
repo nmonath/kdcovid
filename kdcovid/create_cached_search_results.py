@@ -629,7 +629,8 @@ def main(argv):
     task_questions = TaskQuestions()
 
     if FLAGS.results is None:
-        search_tool = SearchTool(data_dir=FLAGS.data_dir, paper_id_field=FLAGS.paper_id)
+        search_tool = SearchTool(data_dir=FLAGS.data_dir, paper_id_field=FLAGS.paper_id, use_object=False,
+                                 gv_prefix='http://kdcovid.nl/', legacy_metadata=True)
         from collections import defaultdict
         results = defaultdict(str)
         for task, questions in task_questions.task2questions.items():
