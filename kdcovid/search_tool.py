@@ -66,7 +66,7 @@ class SearchTool(object):
             self.doc2sec2text = documents
             self.entity_links = entity_links
             if cached_result_file is not None:
-                with open('%s/cached_results.pkl' % data_dir, 'rb') as fin:
+                with open(cached_result_file, 'rb') as fin:
                     self.cached_results = pickle.load(fin)
         else:
             logging.info('Using data dir %s', data_dir)
