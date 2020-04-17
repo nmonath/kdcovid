@@ -424,7 +424,7 @@ h1 {
 def format_task_html(task2subtasks, subtasks_html):
     s = ""
     for t, subtasks in task2subtasks.items():
-            s += """<button type="button" class="collapsible"><b>{}</b></button><div class="content">{}</div>""".format(
+            s += """<button type="button" class="collapsible"><b>{}</b></button><div class="content">{}</div><br><br>""".format(
                 t, format_subtask_html(subtasks, subtasks_html))
     return s
 
@@ -472,6 +472,7 @@ def format_example_queries(example_queries, queries_html, css):
       outline: none;
       font-size: 18px;
       border-style: solid;
+      margin: 5px;
       border-color: #3E4550;
       font-family: 'Basic Sans', sans-serif;
     }
