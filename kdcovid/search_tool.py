@@ -384,7 +384,7 @@ class SearchTool(object):
             body
             {
              margin:0 auto;
-             text-align:center;
+             text-align:left;
              width:100%;
              padding: 0 0;
              font-family: 'Basic Sans', sans-serif;
@@ -394,7 +394,7 @@ class SearchTool(object):
             #wrapper
             {
              margin:0 auto;
-             text-align:center;
+             text-align:left;
             }
             #wrapper h1
             {

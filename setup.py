@@ -3,7 +3,7 @@
 from distutils.core import setup
 
 setup(name='kdcovid',
-      version='0.05',
+      version='0.06',
       packages=['kdcovid'],
       install_requires=[
           "nltk",
