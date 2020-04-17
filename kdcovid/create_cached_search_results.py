@@ -649,7 +649,7 @@ def main(argv):
                 results[q] = html_res
 
         for q, recent, covid in task_questions.example_queries:
-            html_res = search_tool.get_search_results(q, recent, covid)
+            html_res = search_tool.get_search_results(q, recent, covid, Kdocs=5)
             results[q] = html_res
 
         with open(FLAGS.out_dir + '/cached_results.pkl', 'wb') as fout:
