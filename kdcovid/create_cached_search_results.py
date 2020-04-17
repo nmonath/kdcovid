@@ -423,9 +423,8 @@ h1 {
 
 def format_task_html(task2subtasks, subtasks_html):
     s = ""
-    s += "<BR/><BR/><h1>Queries for Provided Questions per Task:</h1><BR/>"
     for t, subtasks in task2subtasks.items():
-            s += """<br><br><button type="button" class="collapsible"><b>{}</b></button><div class="content">{}</div>""".format(
+            s += """<button type="button" class="collapsible"><b>{}</b></button><div class="content">{}</div>""".format(
                 t, format_subtask_html(subtasks, subtasks_html))
     return s
 
@@ -438,6 +437,16 @@ def format_subtask_html(subtasks, subtasks_html):
               <p>{}</p>
             </div>""".format(st, subtasks_html[st])
     return r
+
+def format_examples(subtasks, subtasks_html):
+    r = ''
+    for st, _, _ in subtasks:
+        r += """<button type="button" class="collapsible"><b>{}</b></button>
+            <div class="content1">
+              <p>{}</p>
+            </div>""".format(st, subtasks_html[st])
+    return r
+
 
 def format_example_queries(example_queries, queries_html, css):
     html_string = """
@@ -519,7 +528,7 @@ def format_example_queries(example_queries, queries_html, css):
 
     </body>
     </html>
-    """.replace('CONTENT', format_subtask_html(example_queries, queries_html)).replace('INSERT_CSS', css)
+    """.replace('CONTENT', format_examples(example_queries, queries_html)).replace('INSERT_CSS', css)
     return html_string
 
 def format_tasks(task2subtasks, subtasks_html, css):

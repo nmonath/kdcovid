@@ -125,6 +125,12 @@ class TaskQuestions(object):
         }
 
         self.example_queries = [
+            ('Animal models for viral infection', False, False),
+            ('Antiviral treatment for SARS clinical trials', False, False),
+            ('Antivirals effective for H1N1 virus', False, False),
+            ('Immunity studies for MERS', False, False),
+            ('Sharing response information among planners and providers', False, False),
+            ('Protecting healthcare workers', False, False),
             ('Antivirals effective for MERS', False, False),
             ('Treatments for SARS', False, False),
             ('Efficacy of zanamivir', False, False),
@@ -137,13 +143,7 @@ class TaskQuestions(object):
             ('Pregnant women coronavirus risks', False, False),
             ('Antivirals effective for H1N1', False, False),
             ('Human Coronavirus 229E background information', False, False),
-            ('Animal hosts for coronavirus', False, False),
-            ('Animal models for viral infection', False, False),
-            ('Antiviral treatment for SARS clinical trials', False, False),
-            ('Antivirals effective for H1N1 virus', False, False),
-            ('Immunity studies for MERS', False, False),
-            ('Sharing response information among planners and providers', False, False),
-            ('Protecting healthcare workers', False, False)
+            ('Animal hosts for coronavirus', False, False)
         ]
 
 
