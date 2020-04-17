@@ -87,7 +87,10 @@ class SearchTool(object):
                             paper['publish_time'])
                     except:
                         self.paper_index[paper[self.paper_id_field]]['date'] = dateparser.parse(DEFAULT_DATE)
-                    num_covid += int(self.paper_index[paper[self.paper_id_field]]['covid'])
+                    try:
+                        num_covid += int(self.paper_index[paper[self.paper_id_field]]['covid'])
+                    except:
+                        pass
                 logging.info("Found %d covid papers from %d total" %
                              (num_covid, len(self.paper_index)))
             logging.info('Loading Paper Meta Data...Done! %s seconds' % (time.time() - t))
@@ -155,6 +158,10 @@ class SearchTool(object):
             distances, indices = topk[0].cpu().numpy(), topk[1].cpu().numpy()
             for j in range(distances.shape[0]):
                 qr_key = query_metadata[i][-1]
+                # nn[qr_key] = [{'doc_id': base_metadata[x][0].replace('.json', ''), 'sent_text': base_metadata[x][1],
+                #                'sent_no': base_metadata[x][2],
+                #                'sec_id': base_metadata[x][3], 'sim': distances[j, idx]} for idx, x in
+                #               enumerate(indices[j])]
                 nn[qr_key] = [{'doc_id': base_metadata[x][0].replace('.json', ''), 'sent_text': base_metadata[x][3],
                                'sent_no': base_metadata[x][2],
                                'sec_id': base_metadata[x][1], 'sim': distances[j, idx]} for idx, x in
