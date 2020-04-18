@@ -95,9 +95,11 @@ def encode(all_sections, model_path=None, chunk=0, chunk_size=2500, model=None):
         vectors = np.zeros((len(sentences), dim))
         gt = time.time
         t = gt()
+        counter = 0
         for doc_id, sec_id, sentence_id, s in sentences:
-            vectors[sentence_id] = model.embed_sentence(preprocess_sentence(s))
+            vectors[counter] = model.embed_sentence(preprocess_sentence(s))
             logging.log_every_n(logging.INFO, 'Processed %s sentences | %s seconds', 10, sentence_id, str(gt() - t))
+            counter += 1
         e_t = gt()
         logging.info('Done! Processed %s Sentences | %s seconds', len(sentences), str(e_t - t))
         chunk_meta.extend(sentences)
